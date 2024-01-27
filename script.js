@@ -11,12 +11,30 @@ function addItem(e) {
     done: false,
   };
   items.push(item);
-  localStorage.setItem('items', JSON.stringify(items));
-  //   console.log(items);
+  //   console.log(item.text);
+  localStorage.setItem(itemsKey, item.text);
+  console.log(localStorage.getItem(itemsKey));
+  showItems(items, itemsList);
   this.reset();
-  showItems(itemsList);
-  //   createItems(items, itemsList);
+  itemsKey++;
 }
+
+function showItems(items = [], itemsPlates) {
+  itemsPlates.innerHTML = items
+    .map((item, i) => {
+      return `
+          <li>
+            <input id="${i}" data-index="${i}" name="checkbox" type="checkbox"
+            ${item.done ? 'checked' : ''}
+            />
+            <label for="${i}">${item.text}</label>
+          </li>
+          `;
+    })
+    .join('');
+}
+
+addItems.addEventListener('submit', addItem);
 
 function handleCheckBoxes(items) {
   const checkboxes = document.querySelectorAll('input[name="checkbox"]');
@@ -28,31 +46,8 @@ function handleCheckBoxes(items) {
 
       if (this.checked) {
         items.splice(index, 1);
-        createItems(items, itemsList);
+        showItems(items, itemsList);
       }
     });
   });
 }
-
-function showItems(itemsPlates) {
-  console.log(localStorage);
-  if (!localStorage.length < 1) {
-    const storedItems = JSON.parse(localStorage.getItem('items')) || [];
-    itemsPlates.innerHTML = storedItems
-      .map((item, i) => {
-        return `
-          <li>
-            <input id="${i}" data-index="${i}" name="checkbox" type="checkbox"
-            ${item.done ? 'checked' : ''}
-            />
-            <label contenteditable="true" for="${i}">${item.text}</label>
-          </li>
-        `;
-      })
-      .join('');
-  }
-}
-
-showItems(itemsList);
-
-addItems.addEventListener('submit', addItem);
