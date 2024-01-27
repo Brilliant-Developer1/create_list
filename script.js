@@ -13,25 +13,28 @@ function addItem(e) {
   items.push(item);
   //   console.log(item.text);
   localStorage.setItem(itemsKey, item.text);
-  console.log(localStorage.getItem(itemsKey));
-  showItems(items, itemsList);
+  //   console.log(localStorage.getItem(itemsKey));
+  showItems(itemsList);
   this.reset();
   itemsKey++;
 }
+showItems(itemsList);
+function showItems(itemsPlates) {
+  let html = '';
 
-function showItems(items = [], itemsPlates) {
-  itemsPlates.innerHTML = items
-    .map((item, i) => {
-      return `
-          <li>
-            <input id="${i}" data-index="${i}" name="checkbox" type="checkbox"
-            ${item.done ? 'checked' : ''}
-            />
-            <label for="${i}">${item.text}</label>
-          </li>
-          `;
-    })
-    .join('');
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    const value = localStorage.getItem(key);
+
+    html += `
+        <li>
+          <input id="${key}" data-index="${i}"  name="checkbox" type="checkbox" />
+          <label for="${key}">${value}</label>
+        </li>
+      `;
+  }
+
+  itemsPlates.innerHTML = html;
 }
 
 addItems.addEventListener('submit', addItem);
@@ -51,3 +54,5 @@ function handleCheckBoxes(items) {
     });
   });
 }
+
+//               ${item.done ? 'checked' : ''}
