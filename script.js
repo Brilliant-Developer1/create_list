@@ -1,5 +1,6 @@
 const addItems = document.querySelector('.add-items');
 const itemsList = document.querySelector('.plates');
+const clearAll = document.querySelector('.clear-all');
 let items = [];
 
 function addItem(e) {
@@ -46,20 +47,28 @@ function showItems(itemsPlates) {
     </li>`;
   }
 
-  const checkboxes = document.querySelectorAll('[name="checkbox"]');
-  checkboxes.forEach((checkbox, index) => {
-    checkbox.addEventListener('click', () => handleCheckBoxes(checkbox.id));
-  });
+  handleCheckBoxes();
 }
 
-addItems.addEventListener('submit', addItem);
-
-function handleCheckBoxes(index) {
-  localStorage.removeItem(index);
-
+function handleClearAll() {
+  localStorage.clear();
   showItems(itemsList);
+}
+
+function handleCheckBoxes() {
+  const checkboxes = document.querySelectorAll('[name="checkbox"]');
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', checkbox => {
+      localStorage.removeItem(checkbox.id);
+
+      showItems(itemsList);
+    });
+  });
 }
 
 showItems(itemsList);
 
+addItems.addEventListener('submit', addItem);
+
+clearAll.addEventListener('click', handleClearAll);
 //               ${item.done ? 'checked' : ''}
