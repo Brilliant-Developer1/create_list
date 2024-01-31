@@ -52,7 +52,11 @@
         <input type="text" name="item" placeholder="Item Name" required />
         <input type="submit" value="+ Add Item" />
       </form>
-      <button class="clear-all">Clear All</button>
+      <div class="buttons-box">
+        <button class="buttons clear-all">Clear All</button>
+        <button class="buttons check-all">Check All</button>
+        <button class="buttons unCheck-all">UnCheck All</button>
+      </div>
     </div>
 
     <script>
@@ -60,6 +64,8 @@
       const itemsList = document.querySelector('.plates');
       let items = JSON.parse(localStorage.getItem('items')) || [];
       const clearAll = document.querySelector('.clear-all');
+      const checkAll = document.querySelector('.check-all');
+      const unCheckAll = document.querySelector('.unCheck-all');
 
       function addItem(e) {
         e.preventDefault();
@@ -102,15 +108,31 @@
       addItems.addEventListener('submit', addItem);
       itemsList.addEventListener('click', toggleDone);
 
-      populateList(items, itemsList);
-
       function handleClearAll() {
         localStorage.clear();
         items = [];
         populateList(items, itemsList);
       }
+      function handleCheckAll() {
+        for (let i = 0; i < items.length; i++) {
+          items[i].done = true;
+          localStorage.setItem('items', JSON.stringify(items));
+          populateList(items, itemsList);
+        }
+      }
+      function handleUnCheckAll() {
+        for (let i = 0; i < items.length; i++) {
+          items[i].done = false;
+          localStorage.setItem('items', JSON.stringify(items));
+          populateList(items, itemsList);
+        }
+      }
 
       clearAll.addEventListener('click', handleClearAll);
+      checkAll.addEventListener('click', handleCheckAll);
+      unCheckAll.addEventListener('click', handleUnCheckAll);
+
+      populateList(items, itemsList);
     </script>
   </body>
 </html>
